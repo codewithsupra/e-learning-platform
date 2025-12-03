@@ -1,13 +1,46 @@
-import React from 'react'
+"use client"
+import React, { use, useEffect } from 'react'
 import { ThemeProvider as NextThemesProvider } from "next-themes"
+import { useUser } from '@clerk/nextjs';
+import axios from 'axios';
+import { useState } from 'react';
+import { UserDetailContext } from '@/context/UserDetailContext';
 
 function Provider({
   children,
   ...props
 }: React.ComponentProps<typeof NextThemesProvider>) {
-  return (
-    <NextThemesProvider {...props}>{children}</NextThemesProvider> 
-  )
-}
+   const { user } = useUser();
+  const[userDetail,setUserDetail]=useState();
+  
  
-export default Provider
+//create new user in our database if not exists
+  const CreateNewUser = async () => {
+    console.log("Provider User:", user);
+    const res = await axios.post('/api/user', {});
+    console.log("User API Response:", res.data);
+    //we have to set the userDetail context here
+    setUserDetail(res.data.user);
+  };
+
+  useEffect(() => {
+    if(!user?.id) return;
+    if(userDetail) return;
+    async function func(){
+      await CreateNewUser();
+    } //userDetail already set
+    func();
+
+  }, [user?.id]);
+
+  return (
+    <NextThemesProvider {...props}>
+      <UserDetailContext.Provider value={{userDetail, setUserDetail}}>
+      {children}
+      </UserDetailContext.Provider>
+    </NextThemesProvider>
+  )
+    
+}
+
+export default Provider;
