@@ -1,17 +1,23 @@
+"use client"
 import { Button } from '@/components/ui/button'
+import { useUser } from '@clerk/nextjs'
 import Image from 'next/image'
+import Link from 'next/link'
+
 
 
 
 
 function Hero() {
+    const{user}=useUser();
+    console.log("Hero User:",user);
   return (
     <div className="w-full relative h-screen overflow-hidden">
   
   {/* Background Image behind everything */}
   <Image 
     className="absolute inset-0 w-full h-full object-cover -z-10"
-    src="/codingstation.avif"
+    src="/workstation.gif"
     alt="Hero Image"
     width={1000}
     height={1000}
@@ -29,9 +35,27 @@ function Hero() {
     <h2 className='text-4xl font-pixelify-sans mt-4'>
       Beginner friendly projects
     </h2>
-    <Button className='text-xl mt-6 cursor-pointer p-5 font-bold hover:bg-amber-500' variant={'pixel'}>
+    
+   {!user ? (
+  <Link href="/sign-up">
+    <Button
+      className="text-xl mt-6 cursor-pointer p-5 font-bold hover:bg-amber-500"
+      variant="pixel"
+    >
       Get Started
     </Button>
+  </Link>
+) : (
+  <Link href="/dashboard">
+    <Button
+      className="text-xl mt-6 cursor-pointer p-5 font-bold hover:bg-amber-500"
+      variant="pixel"
+    >
+      Go to Dashboard
+    </Button>
+  </Link>
+)}
+
   </div>
 
 </div>
