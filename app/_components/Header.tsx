@@ -11,7 +11,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { UserButton, useUser } from "@clerk/nextjs";
+import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
 
 const courses = [
   {
@@ -144,6 +144,7 @@ function Header() {
         {!user?<Link href="/sign-up"><Button variant="pixel" className="cursor-pointer">
           Sign Up
         </Button>
+        <SignInButton>Log back in!</SignInButton>
         </Link>
         :(
             <div className="flex items-center gap-6">
