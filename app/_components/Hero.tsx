@@ -51,7 +51,7 @@ function Hero() {
       className="text-xl mt-6 cursor-pointer p-5 font-bold hover:bg-amber-500"
       variant="pixel"
     >
-      Go to Dashboard
+     Browse all Courses
     </Button>
   </Link>
 )}
