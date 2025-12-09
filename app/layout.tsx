@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Toaster } from "@/components/ui/sonner"
 import { Geist, Geist_Mono,Pixelify_Sans,Inter,Jersey_10,} from "next/font/google";
 import "./globals.css";
 import Provider from "./provider";
@@ -46,6 +47,7 @@ export default function RootLayout({
       >
         <Provider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
           {children}
+          <Toaster />
         </Provider>
       </body>
     </html>

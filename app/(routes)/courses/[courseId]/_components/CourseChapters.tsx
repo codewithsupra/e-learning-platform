@@ -14,6 +14,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { LockIcon, ScanFaceIcon } from "lucide-react";
+import { toast } from "sonner";
 
 type ComponentProps = {
   loading: boolean;
@@ -22,7 +23,9 @@ type ComponentProps = {
 
 function CourseChapters({ loading, courseDetail }: ComponentProps) {
   if (loading || !courseDetail || courseDetail.chapters?.length === 0) {
+    toast.info("Course chapters are loading...");
     return (
+        
       <div className="space-y-3 text-neutral-400">
         <div className="h-6 w-40 bg-neutral-700/50 animate-pulse rounded-md" />
         <div className="h-6 w-56 bg-neutral-700/50 animate-pulse rounded-md" />
