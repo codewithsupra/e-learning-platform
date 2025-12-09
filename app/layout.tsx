@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono,Pixelify_Sans,Inter,Jersey_10 } from "next/font/google";
+import { Geist, Geist_Mono,Pixelify_Sans,Inter,Jersey_10,} from "next/font/google";
 import "./globals.css";
 import Provider from "./provider";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -21,6 +21,7 @@ const jersey = Jersey_10({
   weight: ["400"],
   subsets: ["latin"],
 });
+
 
 
 const inter= Inter({
