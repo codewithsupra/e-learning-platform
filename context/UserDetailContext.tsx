@@ -3,7 +3,13 @@
 
 
 import {createContext} from "react";
-export const UserDetailContext = createContext<any>({
-    userDetail:undefined,
+import type { UserType } from "@/app/provider";
+
+export type UserDetailContextType = {
+    userDetail:UserType | null;
+    setUserDetail:React.Dispatch<React.SetStateAction<UserType | null>>;
+}
+export const UserDetailContext = createContext<UserDetailContextType>({
+    userDetail:null,
     setUserDetail:()=>{}
 })

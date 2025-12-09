@@ -4,6 +4,7 @@ import axios from "axios";
 import { ChartNoAxesColumnIncreasingIcon } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export type Course = {
   id: number;
@@ -54,6 +55,7 @@ function CourseList() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 py-10">
       {courses.map((course) => (
+        <Link href={`/courses/${course.courseId}`} key={course.id}>
         <div
           key={course.id}
           className="bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 rounded-2xl cursor-pointer shadow-lg hover:shadow-2xl transition-all p-4 group"
@@ -85,6 +87,7 @@ function CourseList() {
             </span>
           </div>
         </div>
+        </Link>
       ))}
     </div>
   );

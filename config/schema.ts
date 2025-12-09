@@ -1,4 +1,5 @@
 import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
+import { json } from "drizzle-orm/pg-core";
 
 
 export const usersTable = pgTable("users", {
@@ -17,4 +18,13 @@ export const CourseTable=pgTable("courses",{
     difficultyLevel:varchar({length:50}).notNull().default("beginner"),
     tags:varchar({length:255}).notNull(),
 
+})
+export const ChaptersTable=pgTable("chapters",{
+    id:integer().primaryKey().generatedAlwaysAsIdentity(),
+    courseId:integer().notNull(),
+    chapterId:integer().notNull(),
+    name:varchar({length:255}).notNull(),
+    desc:varchar({length:1000}).notNull(),
+    exercises:json(), // Storing exercises as JSON
+ 
 })
