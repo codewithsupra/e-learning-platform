@@ -13,39 +13,46 @@ function CourseStatus({ courseDetail }: Props) {
 
   const enrollment = courseDetail.courseEnrolledInfo;
 
-  // SAFETY: No enrollment means no progress.
-  const progressPercent = enrollment?.progress ?? 0;
+  // XP earned from DB
   const xpEarned = enrollment?.xpEarned ?? 0;
 
-  // -------------------------------------------------------
+  // -----------------------------------------------
   // COUNT TOTAL EXERCISES & TOTAL POSSIBLE XP
-  // -------------------------------------------------------
+  // -----------------------------------------------
   let totalExercises = 0;
   let totalXP = 0;
 
   if (courseDetail.chapters) {
     for (const chapter of courseDetail.chapters) {
-      totalExercises += chapter.exercises.length;
-      for (const exercise of chapter.exercises) {
-        totalXP += exercise.xp;
+      const exercises = chapter.exercises ?? [];
+      totalExercises += exercises.length;
+
+      for (const exercise of exercises) {
+        totalXP += exercise.xp ?? 0;
       }
     }
   }
 
-  // -------------------------------------------------------
-  // CALCULATE COMPLETED EXERCISES FROM PERCENTAGE
-  // (because your DB only stores progress %)
-  // -------------------------------------------------------
-  const completedExercises = Math.round((progressPercent / 100) * totalExercises);
+  // -----------------------------------------------
+  // USE COMPLETED EXERCISES TABLE (OPTION 1)
+  // -----------------------------------------------
+  const completedExercises = courseDetail.completedExercises?.length ?? 0;
+
+  // progressPercent in UI = out of 100
+  const progressPercent =
+    totalExercises === 0
+      ? 0
+      : Math.min((completedExercises / totalExercises) * 100, 100); //since 100 is the max percentage
 
   // XP progress
-  const xpProgress = totalXP === 0 ? 0 : (xpEarned / totalXP) * 100;
+  const xpProgress =
+    totalXP === 0 ? 0 : Math.min((xpEarned / totalXP) * 100, 100);
 
   return (
     <div className="font-pixelify-sans p-6 border-4 rounded-2xl border-zinc-700 bg-zinc-900/60 shadow-2xl w-full space-y-6">
       <h2 className="text-4xl mb-2 tracking-wide underline">Course Progress</h2>
 
-      {/* ----------- EXERCISES COMPLETED ---------- */}
+      {/* ----------- EXERCISES COMPLETED ----------- */}
       <div className="flex items-center gap-6">
         <div className="p-3 rounded-xl">
           <Image
@@ -102,7 +109,7 @@ function CourseStatus({ courseDetail }: Props) {
           />
 
           <p className="text-sm text-zinc-400 mt-1">
-            You are rebuilding XP like a boss! ⚡
+            You are re rebuilding XP like a boss! ⚡
           </p>
         </div>
       </div>

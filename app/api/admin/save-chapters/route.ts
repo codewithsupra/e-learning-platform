@@ -711,7 +711,7 @@ const ALL = [
 
 export async function GET(req: NextRequest) {
   try {
-    for (const course of ALL) {
+    for (const course of ALL) { 
       for (const ch of course.data) {
         await db.insert(ChaptersTable).values({
           courseId: course.courseId,

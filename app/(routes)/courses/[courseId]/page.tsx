@@ -20,6 +20,16 @@ export type CourseType = {
   chapters?: ChapterType[];
   isEnrolled?: boolean;
   courseEnrolledInfo?: EnrollmentType | null;
+  completedExercises?:CompletedExerciseType[];
+
+};
+export type CompletedExerciseType = {
+  id: number;
+  courseId: number;
+  chapterId: number;
+  exerciseId: number;
+  userId: string;
+  completedAt: string; // timestamp string from API
 };
 export type ExerciseType = {
   name: string;

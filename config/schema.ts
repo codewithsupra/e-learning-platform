@@ -37,3 +37,15 @@ export const Enrollment=pgTable("enrollments",{
     xpEarned:integer().notNull().default(0),
 
 })
+export const  CompletedExercisesTable=pgTable("completed_exercises",{
+    id:integer().primaryKey().generatedAlwaysAsIdentity(),
+    courseId:integer().notNull(),
+    chapterId:integer().notNull(),
+    exerciseId:integer().notNull(),
+    userId:varchar({length:255}).notNull(),
+    completedAt:timestamp().notNull().defaultNow(),
+    
+    
+
+
+})

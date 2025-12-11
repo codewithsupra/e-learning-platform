@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { db } from "@/config/db";
-import { ChaptersTable, CourseTable, Enrollment } from "@/config/schema";
+import { ChaptersTable, CompletedExercisesTable, CourseTable, Enrollment } from "@/config/schema";
 import { NextRequest, NextResponse } from "next/server";
-import { eq, and } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 import { currentUser } from "@clerk/nextjs/server";
 
 export async function GET(request: NextRequest) {
@@ -28,13 +29,16 @@ export async function GET(request: NextRequest) {
       .from(ChaptersTable)
       .where(eq(ChaptersTable.courseId, numericId));
 
-    // Enrollment
+    // Get user
     const user = await currentUser();
     const userEmail = user?.primaryEmailAddress?.emailAddress;
 
     let isEnrolled = false;
     let enrollmentInfo = null;
+    
+    let completedExercises: any[] = [];
 
+    // If logged in → check enrollment + completed exercises
     if (userEmail) {
       const enrollment = await db
         .select()
@@ -48,6 +52,17 @@ export async function GET(request: NextRequest) {
 
       isEnrolled = enrollment.length > 0;
       enrollmentInfo = enrollment.length > 0 ? enrollment[0] : null;
+
+      // Fetch completed exercises
+      completedExercises = await db
+        .select()
+        .from(CompletedExercisesTable)
+        .where(
+          and(
+            eq(CompletedExercisesTable.courseId, numericId),
+            eq(CompletedExercisesTable.userId, userEmail)
+          )
+        ).orderBy(desc(CompletedExercisesTable.completedAt),desc(CompletedExercisesTable.courseId),desc(CompletedExercisesTable.exerciseId));
     }
 
     return NextResponse.json({
@@ -56,6 +71,7 @@ export async function GET(request: NextRequest) {
         chapters,
         isEnrolled,
         courseEnrolledInfo: enrollmentInfo,
+        completedExercises, // ← your completed history added!
       },
     });
   }
