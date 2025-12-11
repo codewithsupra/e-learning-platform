@@ -7,6 +7,7 @@ import CourseChapters from './_components/CourseChapters';
 import CourseStatus from './_components/CourseStatus';
 import Upgrade from '../../dashboard/_components/Upgrade';
 import Help from './_components/Help';
+import { is } from 'drizzle-orm';
 
 export type CourseType = {
   id: number;
@@ -17,6 +18,18 @@ export type CourseType = {
   difficultyLevel: string;
   tags: string;
   chapters?: ChapterType[];
+  isEnrolled?: boolean;
+  courseEnrolledInfo?: EnrollmentType | null;
+  completedExercises?:CompletedExerciseType[];
+
+};
+export type CompletedExerciseType = {
+  id: number;
+  courseId: number;
+  chapterId: number;
+  exerciseId: number;
+  userId: string;
+  completedAt: string; // timestamp string from API
 };
 export type ExerciseType = {
   name: string;
@@ -33,6 +46,15 @@ export type ChapterType = {
   desc: string;
   exercises: ExerciseType[];
 };
+export type EnrollmentType = {
+  id: number;
+  courseId: number;
+  userId: string;
+  progress: number; // percentage completed
+  enrolledDate: string; // ISO timestamp string
+  xpEarned: number;
+};
+
 
 
 function  Coursedetail() {
@@ -64,7 +86,7 @@ function  Coursedetail() {
         
   return (
     <div>
-     <Banner loading={loading} courseDetail={courseDetail!} />
+     <Banner loading={loading} courseDetail={courseDetail!} refreshData={() => fetchCourseDetail()} />
      <div className='grid grid-cols-3 p-10 md:px-24 lg:px-32 xl:px-48 gap-7'>
         <div className='col-span-2'>
             <CourseChapters loading={loading} courseDetail={courseDetail}  />

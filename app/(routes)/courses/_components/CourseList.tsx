@@ -2,22 +2,14 @@
 
 import axios from "axios";
 import { ChartNoAxesColumnIncreasingIcon } from "lucide-react";
+import type { CourseType } from "../[courseId]/page";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-export type Course = {
-  id: number;
-  courseId: number;
-  title: string;
-  description: string;
-  bannerImage: string;
-  difficultyLevel: string;
-  tags: string;
-};
 
 function CourseList() {
-  const [courses, setCourses] = useState<Course[]>([]);
+  const [courses, setCourses] = useState<CourseType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   const GetAllCourses = async () => {

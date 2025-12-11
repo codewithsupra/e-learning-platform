@@ -9,69 +9,50 @@ type Props = {
 };
 
 function CourseStatus({ courseDetail }: Props) {
-  // ---------------------------------------------
-  // EXERCISE COUNTING (correct version)
-  // ---------------------------------------------
-  function calculateExerciseCounts() {
-    if (!courseDetail?.chapters) return { completed: 0, totalExercises: 0 };
+  if (!courseDetail) return null;
 
-    let completed = 0;
-    let totalExercises = 0;
+  const enrollment = courseDetail.courseEnrolledInfo;
 
+  // XP earned from DB
+  const xpEarned = enrollment?.xpEarned ?? 0;
+
+  // -----------------------------------------------
+  // COUNT TOTAL EXERCISES & TOTAL POSSIBLE XP
+  // -----------------------------------------------
+  let totalExercises = 0;
+  let totalXP = 0;
+
+  if (courseDetail.chapters) {
     for (const chapter of courseDetail.chapters) {
-      for (const exercise of chapter.exercises) {
-        console.log("Exercise:", exercise); //total no of exercises in each chapter
-        totalExercises++;
+      const exercises = chapter.exercises ?? [];
+      totalExercises += exercises.length;
 
-        // TODO: Replace with real "completed" logic later.
-        const isCompleted = false;
-        if (isCompleted) completed++;
+      for (const exercise of exercises) {
+        totalXP += exercise.xp ?? 0;
       }
     }
-
-    return { completed, totalExercises };
   }
 
-  // ---------------------------------------------
-  // XP LOGIC (correct & separated)
-  // ---------------------------------------------
-  function calculateXP() {
-    if (!courseDetail?.chapters) return { earned: 0, totalXP: 0 };
+  // -----------------------------------------------
+  // USE COMPLETED EXERCISES TABLE (OPTION 1)
+  // -----------------------------------------------
+  const completedExercises = courseDetail.completedExercises?.length ?? 0;
 
-    let earned = 0;
-    let totalXP = 0;
+  // progressPercent in UI = out of 100
+  const progressPercent =
+    totalExercises === 0
+      ? 0
+      : Math.min((completedExercises / totalExercises) * 100, 100); //since 100 is the max percentage
 
-    for (const chapter of courseDetail.chapters) {
-      for (const exercise of chapter.exercises) {
-        totalXP += exercise.xp;
-
-        // TODO: Replace with real completion logic
-        const isCompleted = false;
-        if (isCompleted) {
-          earned += exercise.xp;
-        }
-      }
-    }
-
-    return { earned, totalXP };
-  }
-
-  const { completed, totalExercises } = calculateExerciseCounts();
-  const { earned, totalXP } = calculateXP();
-
-  const exerciseProgress =
-    totalExercises === 0 ? 0 : (completed / totalExercises) * 100;
-
-  const xpProgress = totalXP === 0 ? 0 : (earned / totalXP) * 100;
+  // XP progress
+  const xpProgress =
+    totalXP === 0 ? 0 : Math.min((xpEarned / totalXP) * 100, 100);
 
   return (
-    <div
-      className="font-pixelify-sans p-6 border-4 rounded-2xl border-zinc-700 
-                 bg-zinc-900/60 shadow-2xl w-full space-y-6"
-    >
+    <div className="font-pixelify-sans p-6 border-4 rounded-2xl border-zinc-700 bg-zinc-900/60 shadow-2xl w-full space-y-6">
       <h2 className="text-4xl mb-2 tracking-wide underline">Course Progress</h2>
 
-      {/* ----------- EXERCISES COMPLETED ---------- */}
+      {/* ----------- EXERCISES COMPLETED ----------- */}
       <div className="flex items-center gap-6">
         <div className="p-3 rounded-xl">
           <Image
@@ -87,13 +68,13 @@ function CourseStatus({ courseDetail }: Props) {
           <h2 className="flex justify-between text-xl md:text-2xl">
             Exercises Completed:
             <span className="font-bold text-green-400">
-              {completed} / {totalExercises}
+              {completedExercises} / {totalExercises}
             </span>
           </h2>
 
           <Progress
-            value={exerciseProgress}
-            className="h-4 bg-zinc-800 border border-zinc-700"
+            value={progressPercent}
+            className="h-3 bg-zinc-900 border border-zinc-700"
           />
 
           <p className="text-sm text-zinc-400 mt-1">
@@ -117,18 +98,18 @@ function CourseStatus({ courseDetail }: Props) {
         <div className="flex flex-col gap-3 w-full">
           <h2 className="flex justify-between text-xl md:text-2xl">
             XP Earned:
-            <span className="font-bold text-yellow-400">
-              {earned} / {totalXP}
+            <span className="font-bold text-green-400">
+              {xpEarned} / {totalXP}
             </span>
           </h2>
 
           <Progress
             value={xpProgress}
-            className="h-4 bg-zinc-800 border border-zinc-700"
+            className="h-3 bg-zinc-900 border border-zinc-700"
           />
 
           <p className="text-sm text-zinc-400 mt-1">
-            You are re building XP like a boss! ⚡
+            You are re rebuilding XP like a boss! ⚡
           </p>
         </div>
       </div>
