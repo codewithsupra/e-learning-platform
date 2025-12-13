@@ -1,5 +1,6 @@
 import { integer, pgTable, timestamp, varchar } from "drizzle-orm/pg-core";
 import { json } from "drizzle-orm/pg-core";
+import { UserRoundIcon } from "lucide-react";
 
 
 export const usersTable = pgTable("users", {
@@ -42,10 +43,18 @@ export const  CompletedExercisesTable=pgTable("completed_exercises",{
     courseId:integer().notNull(),
     chapterId:integer().notNull(),
     exerciseId:integer().notNull(),
-    userId:varchar({length:255}).notNull(),
+    userId:varchar({length:255}),
     completedAt:timestamp().notNull().defaultNow(),
-    
-    
+})
 
+export const ExerciseTable=pgTable("exercise",{
+    id:integer().primaryKey().generatedAlwaysAsIdentity(),
+    exerciseId:varchar({length:255}).notNull(),
+    exerciseName:varchar({length:255}).notNull(),
+    courseId:integer().notNull(),
+    userId:varchar({length:255}),
+    chapterId:integer().notNull(),
+    content:json()
+    
 
 })

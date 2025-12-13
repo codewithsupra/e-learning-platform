@@ -12,6 +12,7 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
+import { useParams, usePathname } from "next/navigation";
 
 const courses = [
   {
@@ -72,7 +73,10 @@ const courses = [
 
 function Header() {
     const{user}=useUser();
-    console.log(user);
+    const currentPathName=usePathname();
+    const {slug}=useParams();
+    const slugVar=String(slug);
+  
   return (
     <header className="relative z-50 w-full p-4 border-b backdrop-blur-sm bg-black">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -85,6 +89,7 @@ function Header() {
         </div>
 
         {/* Navigation */}
+        {!slug?
         <NavigationMenu>
           <NavigationMenuList className="gap-4">
             {/* Courses Dropdown */}
@@ -137,7 +142,17 @@ function Header() {
               </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
-        </NavigationMenu>
+        </NavigationMenu>:<h2 className="
+  font-pixelify-sans 
+  text-4xl 
+  font-bold 
+  tracking-wide 
+  uppercase 
+  text-zinc-100
+  drop-shadow-[2px_2px_0px_rgba(0,0,0,0.6)]
+">
+  {slugVar.toUpperCase().replaceAll("-", " ")}
+</h2>}
 
         {/* Auth Button */}
        
