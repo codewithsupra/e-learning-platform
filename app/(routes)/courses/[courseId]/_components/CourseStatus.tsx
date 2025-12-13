@@ -14,7 +14,7 @@ function CourseStatus({ courseDetail }: Props) {
   const enrollment = courseDetail.courseEnrolledInfo;
 
   // XP earned from DB
-  const xpEarned = enrollment?.xpEarned ?? 0;
+  const xpEarned = enrollment?.xpEarned ?? 0; //xp earned for the current enrolled course
 
   // -----------------------------------------------
   // COUNT TOTAL EXERCISES & TOTAL POSSIBLE XP
@@ -28,7 +28,7 @@ function CourseStatus({ courseDetail }: Props) {
       totalExercises += exercises.length;
 
       for (const exercise of exercises) {
-        totalXP += exercise.xp ?? 0;
+        totalXP += exercise.xp ?? 0; // there is XP associated with every exercise 
       }
     }
   }

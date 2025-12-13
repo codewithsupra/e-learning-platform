@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/tooltip";
 import { LockIcon, PlayIcon, RefreshCwIcon, ReplyAllIcon, ScanFaceIcon, SmileIcon, TicketCheckIcon } from "lucide-react";
 import { toast } from "sonner";
+import Link from "next/link";
 
 type ComponentProps = {
   loading: boolean;
@@ -104,6 +105,7 @@ function CourseChapters({ loading, courseDetail }: ComponentProps) {
                     i,
                     chapter.exercises.length
                   );
+                  const slug=exercise.slug;
 
                   return (
                     <div
@@ -122,25 +124,29 @@ function CourseChapters({ loading, courseDetail }: ComponentProps) {
                         <Button
                           variant={"pixel"}
                           size="lg"
-                          className="font-pixelify-sans bg-green-500"
+                          className="font-pixelify-sans cursor-pointer bg-green-500"
                         >
                           <SmileIcon/>Completed
                         </Button>
                       ) : enabled ? (
+                        <Link href={'/courses/'+courseDetail.courseId+'/'+chapter.chapterId+'/'+slug}>
+
                         <Button
                           variant={"pixel"}
                           size={"lg"}
-                          className="font-pixelify-sans underline text-sm"
+                          className="font-pixelify-sans underline  cursor-pointer text-sm"
                         >
+                        
                           <PlayIcon />Play Now
                         </Button>
+                        </Link>
                       ) : (
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <Button
                               variant={"pixelDisabled"}
                               size={"lg"}
-                              className="font-mono text-sm flex gap-2 p-2"
+                              className="font-mono text-sm cursor-pointer flex gap-2 p-2"
                             >
                               <LockIcon /> <span>Locked</span>
                             </Button>

@@ -702,7 +702,7 @@ const CSS_DATA = [
 /* ---------------------------------------------------
    DO NOT TOUCH — Seeder Logic
 --------------------------------------------------- */
-const ALL = [
+const ALL_COURSES = [
   { courseId: 1, data: REACT_DATA },
   { courseId: 2, data: DATA },
   { courseId: 3, data: PYTHON_DATA },
@@ -711,14 +711,14 @@ const ALL = [
 
 export async function GET(req: NextRequest) {
   try {
-    for (const course of ALL) { 
-      for (const ch of course.data) {
+    for (const course of ALL_COURSES) { 
+      for (const chapter of course.data) {
         await db.insert(ChaptersTable).values({
           courseId: course.courseId,
-          chapterId: ch.id,
-          name: ch.name,
-          desc: ch.desc,
-          exercises: ch.exercises
+          chapterId: chapter.id,
+          name: chapter.name,
+          desc: chapter.desc,
+          exercises: chapter.exercises
         });
       }
     }
