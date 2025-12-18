@@ -33,30 +33,7 @@ function CourseChapters({ loading, courseDetail }: ComponentProps) {
   }
 
   // Enable/disable logic (kept exactly as you had it)
-  const EnableExercise = (
-    chapterIndex: number,
-    exerciseIndex: number,
-    chapterExercisesLength: number
-  ) => {
-    const completed = courseDetail?.completedExercises;
-
-    // If nothing is completed, enable FIRST exercise ONLY
-    if (!completed || completed.length === 0) {
-      return chapterIndex === 0 && exerciseIndex === 0;
-    }
-
-    // Last completed exercise
-    const last = completed[completed.length - 1];
-
-    // Convert to global exercise number
-    const currentExerciseNumber =
-      chapterIndex * chapterExercisesLength + exerciseIndex + 1;
-
-    const lastCompletedNumber =
-      (last.chapterId - 1) * chapterExercisesLength + last.exerciseId;
-
-    return currentExerciseNumber === lastCompletedNumber + 2;
-  };
+  
 
   if (loading || !courseDetail || courseDetail.chapters?.length === 0) {
     toast.info("Course chapters are loading...");
@@ -100,11 +77,7 @@ function CourseChapters({ loading, courseDetail }: ComponentProps) {
                     exerciseId
                   );
 
-                  const enabled = EnableExercise(
-                    index,
-                    i,
-                    chapter.exercises.length
-                  );
+                   
                   const slug=exercise.slug;
 
                   return (
@@ -128,7 +101,7 @@ function CourseChapters({ loading, courseDetail }: ComponentProps) {
                         >
                           <SmileIcon/>Completed
                         </Button>
-                      ) : enabled ? (
+                      ) :courseDetail.isEnrolled ? (
                         <Link href={'/courses/'+courseDetail.courseId+'/'+chapter.chapterId+'/'+slug}>
 
                         <Button

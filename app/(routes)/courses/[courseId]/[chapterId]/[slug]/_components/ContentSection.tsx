@@ -11,61 +11,93 @@ function ContentSection({ chapter, loading }: Props) {
   const htmlcontent = chapter?.exercise.content.content;
 
   // Loading skeleton
-  if (loading && !chapter) {
+  if (loading || !chapter) {
     return (
-      <div className="p-6 space-y-4">
-        <Skeleton className="h-8 w-56 bg-neutral-700/60 rounded-xl" />
-        <Skeleton className="h-6 w-full bg-neutral-700/60 rounded-xl" />
-        <Skeleton className="h-6 w-4/5 bg-neutral-700/60 rounded-xl" />
-        <Skeleton className="h-6 w-3/5 bg-neutral-700/60 rounded-xl" />
+      <div className="h-full flex items-center justify-center p-8">
+        <div className="space-y-4 w-full max-w-2xl">
+          <Skeleton className="h-10 w-64 rounded-xl bg-neutral-700/50" />
+          <Skeleton className="h-6 w-full rounded-lg bg-neutral-700/40" />
+          <Skeleton className="h-6 w-5/6 rounded-lg bg-neutral-700/40" />
+          <Skeleton className="h-6 w-3/4 rounded-lg bg-neutral-700/40" />
+        </div>
       </div>
     );
   }
 
-  if (!chapter) {
-    return <div className="p-4 text-red-500">Failed to load content.</div>;
-  }
-
   return (
-    <div className="p-8 overflow-y-auto h-full space-y-8">
+    <div className="h-full overflow-y-auto bg-linear-to-b from-neutral-900 to-neutral-950">
+      <div className="max-w-4xl mx-auto p-6 space-y-6 pb-12">
+        {/* Title */}
+        <header className="sticky top-0 z-10 bg-neutral-900/95 backdrop-blur-sm border-b border-neutral-700 pb-3 mb-4 -mx-6 px-6 pt-6">
+          <h2 className="font-pixelify-sans text-3xl text-center tracking-wide bg-linear-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+            {chapter.exercise.exerciseName.toLocaleUpperCase()}
+          </h2>
+        </header>
 
-      {/* Title */}
-      <h2 className="font-pixelify-sans text-4xl text-primary  underline tracking-wide">
-        {chapter.exercise.exerciseName}
-      </h2>
-
-      {/* Main content */}
-      <section
-        className="prose prose-invert max-w-none leading-relaxed bg-neutral-900/40 p-6 rounded-2xl border border-neutral-700 shadow-lg"
-        dangerouslySetInnerHTML={{
-          __html: htmlcontent || "<p>No content available.</p>",
-        }}
-      />
-
-      {/* Task Section */}
-      <section className="bg-neutral-900/60 p-6 rounded-2xl border border-primary/40 shadow-lg space-y-4">
-        <h3 className="font-pixelify-sans text-3xl text-primary underline">
-          Task
-        </h3>
-
-        <div
-          className="prose prose-invert p-4 bg-zinc-600 max-w-none rounded-2xl leading-relaxed"
+        {/* Main Content */}
+        <section
+          className="
+            prose prose-invert prose-sm max-w-none
+            leading-relaxed
+            bg-neutral-800/50
+            border border-neutral-700/50
+            rounded-xl
+            p-5
+            shadow-xl
+            hover:border-neutral-600/50
+            transition-colors
+            backdrop-blur-sm
+          "
           dangerouslySetInnerHTML={{
-            __html: chapter.exercise.content.task,
+            __html: htmlcontent || "<p>No content available.</p>",
           }}
         />
-        <h3 className="font-pixelify-sans  text-yellow-400 text-3xl flex gap-2 items-center underline">
-          <LightbulbIcon />  Hint
-        </h3>
 
-        <div
-          className="prose prose-invert p-4 bg-zinc-600 max-w-none rounded-2xl leading-relaxed"
-          dangerouslySetInnerHTML={{
-            __html: chapter.exercise.content.hint || "<p>No hints available.</p>",
-          }}
-        />
-      </section>
+        {/* Task */}
+        <section className="bg-linear-to-br from-blue-900/20 to-neutral-900/70 border border-blue-500/30 rounded-xl p-5 shadow-xl space-y-3 hover:border-blue-500/50 transition-all">
+          <h3 className="font-pixelify-sans text-2xl bg-linear-to-r from-blue-500 to-cyan-500 text-center text-white tracking-wide py-2 rounded-lg flex items-center justify-center gap-2">
+            🎯 Task
+          </h3>
 
+          <div
+            className="
+              prose prose-invert prose-sm max-w-none
+              bg-neutral-800/70
+              border border-neutral-600/50
+              rounded-lg
+              p-4
+              backdrop-blur-sm
+            "
+            dangerouslySetInnerHTML={{
+              __html: chapter.exercise.content.task,
+            }}
+          />
+        </section>
+
+        {/* Hint */}
+        <section className="bg-linear-to-br from-yellow-900/20 to-neutral-900/70 border border-yellow-500/30 rounded-xl p-5 shadow-xl space-y-3 hover:border-yellow-500/50 transition-all">
+          <h3 className="font-pixelify-sans text-2xl text-white text-center bg-linear-to-r from-yellow-500 to-amber-500 tracking-wide py-2 rounded-lg flex items-center justify-center gap-2">
+            <LightbulbIcon className="w-6 h-6" />
+            Hint
+          </h3>
+
+          <div
+            className="
+              prose prose-invert prose-sm max-w-none
+              bg-neutral-800/70
+              border border-yellow-400/20
+              rounded-lg
+              p-4
+              backdrop-blur-sm
+            "
+            dangerouslySetInnerHTML={{
+              __html:
+                chapter.exercise.content.hint ||
+                "<p>No hints available.</p>",
+            }}
+          />
+        </section>
+      </div>
     </div>
   );
 }
