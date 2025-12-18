@@ -23,9 +23,9 @@ function CourseStatus({ courseDetail }: Props) {
   let totalXP = 0;
 
   if (courseDetail.chapters) {
-    for (const chapter of courseDetail.chapters) {
-      const exercises = chapter.exercises ?? [];
-      totalExercises += exercises.length;
+    for (const chapter of courseDetail.chapters) { // mutlitple chapters per course
+      const exercises = chapter.exercises ?? []; //multiple exercises per chapter
+      totalExercises += exercises.length; //each chapter has multiple exercises
 
       for (const exercise of exercises) {
         totalXP += exercise.xp ?? 0; // there is XP associated with every exercise 

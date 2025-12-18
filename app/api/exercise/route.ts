@@ -1,11 +1,15 @@
-import { ChaptersTable, ExerciseTable } from "@/config/schema";
+import { ChaptersTable, CompletedExercisesTable, ExerciseTable } from "@/config/schema";
 import { db } from "@/config/db";
 import { eq, and } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
+import { currentUser } from "@clerk/nextjs/server";
+import { use } from "react";
 
 export async function POST(req: NextRequest) {
   try {
     const { courseId, chapterId, exerciseId } = await req.json();
+    const user= await currentUser();
+    const userId=user?.primaryEmailAddress?.emailAddress ?? "Sheldon_Cooper";
 
     console.log("Received:", courseId, chapterId, exerciseId);
 
@@ -39,6 +43,15 @@ export async function POST(req: NextRequest) {
     if (exerciseResult.length === 0) {
       return NextResponse.json({ error: "Exercise not found" }, { status: 404 });
     }
+    //get completed exercise in that course/chapter/exercise for the user
+    const completedExercisesUpdated=await db.select().from(CompletedExercisesTable).where(
+      and(
+        eq(CompletedExercisesTable.courseId,courseId),
+        eq(CompletedExercisesTable.chapterId,chapterId),
+        eq(CompletedExercisesTable.userId,userId),
+      )
+    );
+    console.log("Completed Exercise:",completedExercisesUpdated);
 
     // 3. Return structured result
     return NextResponse.json({
@@ -46,8 +59,11 @@ export async function POST(req: NextRequest) {
       chapter: {
         ...chapterResult[0],
         exercise: exerciseResult[0],
+        completedexercise:completedExercisesUpdated||[],
       },
     });
+   
+    
   } catch (err) {
     console.error("Server Error:", err);
     return NextResponse.json(

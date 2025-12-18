@@ -106,6 +106,115 @@ const DATA=[
     }
   }
 ]
+const DATA_CHAPTER_2 = [
+  {
+    courseId: 2,
+    chapterId: 2,
+    exerciseId: "mind-vs-body",
+    exerciseName: "Mind vs Body",
+    exercisesContent: {
+      content: "<body><p>The <code>&lt;head&gt;</code> stores metadata. The <code>&lt;body&gt;</code> displays visible content.</p></body>",
+      task: "<body><p>Add a sentence inside the body explaining what users can see.</p></body>",
+      hint: "<body><p>The body contains visible page content.</p></body>",
+      starterCode: {
+        "/index.html": "<!DOCTYPE html>\n<html>\n<head><title>Mind vs Body</title></head>\n<body>\n\n</body>\n</html>"
+      },
+      regex: "<body>[\\s\\S]*</body>",
+      output: "Visible content added",
+      hintXp: 20
+    }
+  },
+
+  {
+    courseId: 2,
+    chapterId: 2,
+    exerciseId: "activate-styles",
+    exerciseName: "Activate Styles",
+    exercisesContent: {
+      content: "<body><p>CSS styles can be written inside a <code>&lt;style&gt;</code> tag in the head.</p></body>",
+      task: "<body><p>Add a <code>&lt;style&gt;</code> tag inside the head.</p></body>",
+      hint: "<body><p><code>&lt;style&gt;&lt;/style&gt;</code></p></body>",
+      starterCode: {
+        "/index.html": "<!DOCTYPE html>\n<html>\n<head>\n\n</head>\n<body></body>\n</html>"
+      },
+      regex: "<style>[\\s\\S]*</style>",
+      output: "<style></style>",
+      hintXp: 30
+    }
+  },
+
+  {
+    courseId: 2,
+    chapterId: 2,
+    exerciseId: "display-your-content",
+    exerciseName: "Display Your Content",
+    exercisesContent: {
+      content: "<body><p>Only content inside the body appears on the page.</p></body>",
+      task: "<body><p>Add an <code>&lt;h1&gt;</code> inside the body.</p></body>",
+      hint: "<body><p>Use <code>&lt;h1&gt;</code>.</p></body>",
+      starterCode: {
+        "/index.html": "<!DOCTYPE html>\n<html>\n<head></head>\n<body>\n\n</body>\n</html>"
+      },
+      regex: "<h1>[\\s\\S]*</h1>",
+      output: "<h1>Displayed Content</h1>",
+      hintXp: 15
+    }
+  },
+
+  {
+    courseId: 2,
+    chapterId: 2,
+    exerciseId: "add-external-script",
+    exerciseName: "Add External Script",
+    exercisesContent: {
+      content: "<body><p>Scripts add behavior and interactivity.</p></body>",
+      task: "<body><p>Add a script tag linking to <code>app.js</code>.</p></body>",
+      hint: "<body><p><code>&lt;script src=\"app.js\"&gt;&lt;/script&gt;</code></p></body>",
+      starterCode: {
+        "/index.html": "<!DOCTYPE html>\n<html>\n<head></head>\n<body>\n\n</body>\n</html>"
+      },
+      regex: "<script src=\"app.js\"></script>",
+      output: "<script src=\"app.js\"></script>",
+      hintXp: 20
+    }
+  },
+
+  {
+    courseId: 2,
+    chapterId: 2,
+    exerciseId: "meta-collection",
+    exerciseName: "Meta Collection",
+    exercisesContent: {
+      content: "<body><p>Meta tags describe the page to browsers and search engines.</p></body>",
+      task: "<body><p>Add any <code>&lt;meta&gt;</code> tag inside the head.</p></body>",
+      hint: "<body><p>Example: <code>&lt;meta charset=\"UTF-8\"&gt;</code></p></body>",
+      starterCode: {
+        "/index.html": "<!DOCTYPE html>\n<html>\n<head>\n\n</head>\n<body></body>\n</html>"
+      },
+      regex: "<meta",
+      output: "<meta>",
+      hintXp: 25
+    }
+  },
+
+  {
+    courseId: 2,
+    chapterId: 2,
+    exerciseId: "body-structure-challenge",
+    exerciseName: "Body Structure Challenge",
+    exercisesContent: {
+      content: "<body><p>A clean body structure improves readability.</p></body>",
+      task: "<body><p>Add a heading and a paragraph inside the body.</p></body>",
+      hint: "<body><p>Use <code>&lt;h1&gt;</code> and <code>&lt;p&gt;</code>.</p></body>",
+      starterCode: {
+        "/index.html": "<!DOCTYPE html>\n<html>\n<head></head>\n<body>\n\n</body>\n</html>"
+      },
+      regex: "<h1>[\\s\\S]*</h1>[\\s\\S]*<p>[\\s\\S]*</p>",
+      output: "Structured body",
+      hintXp: 25
+    }
+  }
+];
 
 export async function GET(request: NextRequest) {
   try {
@@ -119,8 +228,21 @@ export async function GET(request: NextRequest) {
         content: exercise.exercisesContent,
       });
     }
+    for (const ex of DATA_CHAPTER_2) {
+      await db.insert(ExerciseTable).values({
+        courseId: ex.courseId,
+        chapterId: ex.chapterId, // ✅ CHAPTER 2
+        exerciseId: ex.exerciseId, // ✅ slug match
+        exerciseName: ex.exerciseName,
+        userId: "admin",
+        content: ex.exercisesContent,
+      });
+    }
 
-    return NextResponse.json({ message: "Exercises saved successfully" });
+
+
+
+    return NextResponse.json({ message: "Exercises for chapter 2  saved successfully" });
   } catch (error) {
     console.error("DB Insert Error:", error);
     return NextResponse.json(
